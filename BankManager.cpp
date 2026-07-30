@@ -9,29 +9,47 @@ private:
 public:
     string UserNames;
     string accountNumber;
-
+    string phoneNumber;
+    string nationalIdNumber;
+    int amount;
 
     void createAccount() {
         cout<<"CREATE AN ACCOUNT AT KINEMS BANK"<<endl;
 
             cout<<"Enter your User name: "<<endl;
             getline(cin,UserNames);
+
             do {
                 cout<<"Enter your account number: "<<endl;
                 cin>>accountNumber;
             }while (accountNumber.length() != 6);
             cin.ignore();
+
+            do{
+                cout<<"Enter your Phone number"<<endl;
+                cin>>phoneNumber;
+            }while(phoneNumber.length() != 10);
+            cin.ignore();
+            do{
+                cout<<"Enter your National Identification number (without the dash)"<<endl;
+                cin>>nationalIdNumber;
+            }while(nationalIdNumber.length() != 13);
+            cin.ignore();
+
             do {
                 cout<<"Enter the initial balance: "<<endl;
                 cin>>balance;
             }while (balance < 0);
             cin.ignore();
+
+
             accountCreated = true;
             cout<<"Your Account Has been created successfully!"<<endl;
             accountDisplay();
 
     }
-    void bankServices() {
+
+   /* void bankServices() {
         int x;
         do {
             cout<<"Choose the  Bank service you want"<<endl;
@@ -66,17 +84,38 @@ public:
 
 
         }while (x != 0);
-    }
+    } 
+*/
 
+   void updateAccountDetails() {
+
+        cout<<"UPDATE YOUR ACCOUNT DETAILS"<<endl;
+        cout<<"Enter your User name: "<<endl;
+        getline(cin,UserNames);
+        do{
+            cout<<"update Phone Number"<<endl;
+            cin>>phoneNumber;
+        }while(phoneNumber.length() != 10);
+        cin.ignore();
+        do{
+            cout<<"Update your National Id number (without the dash)"<<endl;
+            cin>>nationalIdNumber;
+        }while(nationalIdNumber.length() != 13);
+        cin.ignore();
+
+        accountCreated = true;
+        cout<<"Your Account Has been updated successfully!"<<endl;
+        accountDisplay(); 
+   }
      void  checkBalance () const {
 
         cout<<"Your Remaining Balance is "<<balance<<endl;
     }
     void withdrawMoney() {
-        int amount;
+        
         cout<<"Enter the amount of money you want to withdraw "<<endl;
         cin>>amount;
-        if (amount < 0) {
+        if (amount <= 0) {
             cout<<"Invalid amount of money"<<endl;
         }else {
             if (amount > balance) {
@@ -87,6 +126,37 @@ public:
                 cout<<"Your remaining balance is "<<balance<<endl;
             }
         }
+
+    }
+
+    void sendMoney(){
+           
+        cout<<"Enter the amount of money you want to send "<<endl;
+        cin>>amount;
+        if (amount <= 0) {
+            cout<<"Invalid amount of money"<<endl;
+        }else {
+            if (amount > balance) {
+                cout<<"Insufficient Balance!!!!"<<endl;
+            }else if (amount <= balance){
+                balance = balance - amount;
+
+            }
+        }
+    }
+    void transferMoney(){
+        cout<<"Enter the amount of money you want to send "<<endl;
+        cin>>amount;
+         if (amount <= 0) {
+            cout<<"Invalid amount of money"<<endl;
+        }else {
+            if (amount > balance) {
+                cout<<"Insufficient Balance!!!!"<<endl;
+            }else if (amount <= balance){
+                balance = balance + amount;
+            }
+        }
+        cout<<"You have transfered "<<amount<<endl;
 
     }
 
@@ -105,9 +175,12 @@ public:
         cout<<"GHANKINEMS BANK MANAGEMENT "<<endl;
         cout<<"The account name is : "<<UserNames<<endl;
         cout<<"The account number: "<<accountNumber<<endl;
+        cout<<"Your Phone Number: "<<phoneNumber<<endl;
+        cout<<" Your national Id number:  "<<nationalIdNumber<<endl;
         cout<<"The Account  balance: "<<balance<<endl;
     }
-    void searchAccount() const {
+
+    /*void searchAccount() const {
         string x;
         do {
             cout<<"Enter Your account number: "<<endl;
@@ -120,7 +193,8 @@ public:
         }else {
             cout<<"Invalid account number"<<endl;
         }
-    }
+    }*/
+
     string getAccountNumber() {
         return accountNumber;
     }
@@ -146,6 +220,9 @@ int main() {
         cout << "4. Deposit Money" << endl;
         cout << "5. Withdraw Money" << endl;
         cout << "6. Check Balance" << endl;
+        cout<< "7. Transfer Money"<<endl;
+        cout << " 8. Update account details"<<endl;
+        cout<< " 9. Delete account"<<endl;
         cout << "0. Exit" << endl;
 
         cout << "Enter your choice: "<<endl;
@@ -191,7 +268,7 @@ int main() {
 
                 do {
                     cout << "Enter account number: "<<endl;
-                    getline(cin, accNumber);
+                    cin>>accNumber;
                 }while (accNumber.length() != 6);
             for(int i = 0; i < accountCount; i++)
             {
@@ -281,6 +358,54 @@ int main() {
             }
 
             break;
+        case 7:
+         cout<<"Enter your Account number "<<endl;
+         cin>>accNumber;
+        
+         for(int i = 0; i < accountCount; i++){
+            
+            if(accounts[i].getAccountNumber() == accNumber){
+                accounts[i].sendMoney();
+                break;
+            }
+         }
+        cout<<"Enter receipient account number"<<endl;
+        cin>>accNumber;
+
+        for(int i = 0; i < accountCount; i++){
+            if(accounts[i].getAccountNumber()== accNumber){
+                accounts[i].transferMoney();
+            }
+        }
+         
+        break;
+       case 8:
+        cout<<"UPDATE YOUR ACCOUNT DETAILS"<<endl;
+        cout<<"Enter your account number"<<endl;
+        cin>>accNumber;
+        cin.ignore();
+        for(int i = 0; i < accountCount; i++){
+            if(accounts[i].getAccountNumber() == accNumber){
+                accounts[i].updateAccountDetails();
+            }
+        }
+       break;
+       case 9:
+       cout<<"CLOSE ACCOUNT AT KIMEMS BANK"<<endl;
+       cout<<"Enter your aacount Number"<<endl;
+       cin>>accNumber;
+       cin.ignore();
+       for(int i = 0; i < accountCount; i++){
+        if(accounts[i].getAccountNumber() == accNumber){
+            for(int j = i; j < accountCount - 1; j++){
+                accounts[j] = accounts[j + 1];
+            }
+            accountCount--;
+            cout<<"Your account has been closed successfully"<<endl;
+            break;
+        }
+       }
+       break;
 
         case 0:
 
