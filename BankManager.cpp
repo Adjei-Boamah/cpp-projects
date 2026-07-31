@@ -129,10 +129,11 @@ public:
 
     }
 
-    void sendMoney(){
+
+    void sendMoney(double amount){
            
-        cout<<"Enter the amount of money you want to send "<<endl;
-        cin>>amount;
+        // cout<<"Enter the amount of money you want to send "<<endl;
+        // cin>>amount;
         if (amount <= 0) {
             cout<<"Invalid amount of money"<<endl;
         }else {
@@ -144,9 +145,9 @@ public:
             }
         }
     }
-    void transferMoney(){
-        cout<<"Enter the amount of money you want to send "<<endl;
-        cin>>amount;
+    void transferMoney(double amount){
+        // cout<<"Enter the amount of money you want to send "<<endl;
+        // cin>>amount;
          if (amount <= 0) {
             cout<<"Invalid amount of money"<<endl;
         }else {
@@ -210,6 +211,7 @@ int main() {
     int choice;
     string accNumber;
     bool found;
+    double amount;
 
     do {
 
@@ -361,11 +363,14 @@ int main() {
         case 7:
          cout<<"Enter your Account number "<<endl;
          cin>>accNumber;
+
+         cout<<"Enter the amount you want"<<endl;
+         cin>>amount;
         
          for(int i = 0; i < accountCount; i++){
             
             if(accounts[i].getAccountNumber() == accNumber){
-                accounts[i].sendMoney();
+                accounts[i].sendMoney(amount);
                 break;
             }
          }
@@ -374,7 +379,7 @@ int main() {
 
         for(int i = 0; i < accountCount; i++){
             if(accounts[i].getAccountNumber()== accNumber){
-                accounts[i].transferMoney();
+                accounts[i].transferMoney(amount);
             }
         }
          
