@@ -16,7 +16,7 @@ int main() {
         cout<<"The maximum class size is 20."<<endl;
         return 1;
     }
-    string studentNames[20]={"Amuzu NATHAN","Richmond BEKOE","Braimah BOAKYE","Michael OPOKU","Aheto MORRIS","Ampofo JOSEPH","Gifty ACHAMPONG","Mensah DAVID","Rodney KWEI","Oryeh EMMANUEL"};
+    string studentNames[20]={"Amuzu NATHAN","Richmond BEKOE","Braimah BOAKYE","Michael OPOKU","Aheto MORRIS","Ampofo JOSEPH","ANAMBRA ACHAMPONG","Mensah DAVID","Rodney KWEI","Oryeh EMMANUEL"};
 
     int scores[20]={63,90,78,88,76,83,92,75,81,95};
     int idNumber[20] = {217622,217623,217624,217625,217626,217627,217628,217629,217630,217631};
