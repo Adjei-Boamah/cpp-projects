@@ -1,11 +1,15 @@
 #include <iostream>
 #include <vector>
+#include <string>
 using namespace std;
 
 class BankAccount {
 private:
     double balance = 0;
     bool accountCreated = false;
+
+    vector<string> transactions;
+    
 public:
     string UserNames;
     string accountNumber;
@@ -44,6 +48,7 @@ public:
 
 
             accountCreated = true;
+            addTransaction("Account created with balance GHc " + to_string(balance));
             cout<<"Your Account Has been created successfully!"<<endl;
             accountDisplay();
 
@@ -105,6 +110,7 @@ public:
 
         accountCreated = true;
         cout<<"Your Account Has been updated successfully!"<<endl;
+        addTransaction("Updated account details");
         accountDisplay(); 
    }
      void  checkBalance () const {
@@ -122,6 +128,7 @@ public:
                 cout<<"Insufficient Balance!!!!"<<endl;
             }else if (amount <= balance){
                 balance = balance - amount;
+                addTransaction("Withdrew GHc " + to_string(amount));
                 cout<<"You withdrawn "<<amount<<endl;
                 cout<<"Your remaining balance is "<<balance<<endl;
             }
@@ -130,35 +137,29 @@ public:
     }
 
 
-    void sendMoney(double amount){
+    bool sendMoney(double amount){
            
         // cout<<"Enter the amount of money you want to send "<<endl;
         // cin>>amount;
         if (amount <= 0) {
             cout<<"Invalid amount of money"<<endl;
-        }else {
-            if (amount > balance) {
-                cout<<"Insufficient Balance!!!!"<<endl;
-            }else if (amount <= balance){
-                balance = balance - amount;
-
-            }
+            return false;
         }
+          
+        if (amount > balance) {
+            cout<<"Insufficient Balance!!!!"<<endl;
+            return false;
+        }
+           
+        balance = balance - amount;
+        addTransaction("Transferred GHc " + to_string(amount));
+       return true;    
     }
-    void transferMoney(double amount){
-        // cout<<"Enter the amount of money you want to send "<<endl;
-        // cin>>amount;
-         if (amount <= 0) {
-            cout<<"Invalid amount of money"<<endl;
-        }else {
-            if (amount > balance) {
-                cout<<"Insufficient Balance!!!!"<<endl;
-            }else if (amount <= balance){
-                balance = balance + amount;
-            }
-        }
-        cout<<"You have transfered "<<amount<<endl;
 
+    void transferMoney(double amount){
+      
+         balance = balance + amount;
+        addTransaction("Received GHc " + to_string(amount));
     }
 
 
@@ -169,6 +170,7 @@ public:
             cin>>amount;
         }while (amount <= 0);
        balance = balance + amount;
+       addTransaction("Deposited GHc " + to_string(amount));
         cout<<"Your new Balance is "<<balance<<endl;
     }
 
@@ -200,6 +202,26 @@ public:
         return accountNumber;
     }
 
+    void addTransaction(string message){
+       transactions.push_back(message);
+    }
+
+
+    void displayTransactions() const{
+
+        if(transactions.empty())
+        {
+            cout << "No transactions found." << endl;
+            return;
+        }
+
+        cout << "\n===== TRANSACTION HISTORY =====\n";
+
+        for(int i = 0; i < transactions.size(); i++)
+        {
+            cout << i + 1 << ". " << transactions[i] << endl;
+        }
+    }
 };
 
 int main() {
@@ -212,6 +234,9 @@ int main() {
     string accNumber;
     bool found;
     double amount;
+    string senderAcc, receiverAcc;
+    int senderIndex = -1;
+    int receiverIndex = -1;
 
     do {
 
@@ -223,8 +248,9 @@ int main() {
         cout << "5. Withdraw Money" << endl;
         cout << "6. Check Balance" << endl;
         cout<< "7. Transfer Money"<<endl;
-        cout << " 8. Update account details"<<endl;
-        cout<< " 9. Delete account"<<endl;
+        cout << "8. Update account details"<<endl;
+        cout<< "9. Delete account"<<endl;
+        cout<< "10. Display transaction history"<<endl;
         cout << "0. Exit" << endl;
 
         cout << "Enter your choice: "<<endl;
@@ -360,30 +386,54 @@ int main() {
             }
 
             break;
-        case 7:
-         cout<<"Enter your Account number "<<endl;
-         cin>>accNumber;
+       case 7:
 
-         cout<<"Enter the amount you want"<<endl;
-         cin>>amount;
-        
-         for(int i = 0; i < accountCount; i++){
-            
-            if(accounts[i].getAccountNumber() == accNumber){
-                accounts[i].sendMoney(amount);
+            cout << "Enter sender account number: ";
+            cin >> senderAcc;
+
+            cout << "Enter receiver account number: ";
+            cin >> receiverAcc;
+
+            if(senderAcc == receiverAcc)
+            {
+                cout << "You cannot transfer money to the same account." << endl;
                 break;
             }
-         }
-        cout<<"Enter receipient account number"<<endl;
-        cin>>accNumber;
 
-        for(int i = 0; i < accountCount; i++){
-            if(accounts[i].getAccountNumber()== accNumber){
-                accounts[i].transferMoney(amount);
+            cout << "Enter amount: ";
+            cin >> amount;
+
+            // Find sender and receiver
+            for(int i = 0; i < accountCount; i++)
+            {
+                if(accounts[i].getAccountNumber() == senderAcc)
+                    senderIndex = i;
+
+                if(accounts[i].getAccountNumber() == receiverAcc)
+                    receiverIndex = i;
             }
-        }
-         
+
+            if(senderIndex == -1)
+            {
+                cout << "Sender account not found." << endl;
+                break;
+            }
+
+            if(receiverIndex == -1)
+            {
+                cout << "Receiver account not found." << endl;
+                break;
+            }
+
+            if(accounts[senderIndex].sendMoney(amount))
+            {
+                accounts[receiverIndex].transferMoney(amount);
+
+                cout << "Transfer successful!" << endl;
+            }
+
         break;
+            
        case 8:
         cout<<"UPDATE YOUR ACCOUNT DETAILS"<<endl;
         cout<<"Enter your account number"<<endl;
@@ -411,6 +461,30 @@ int main() {
         }
        }
        break;
+
+       case 10:
+
+            found = false;
+
+            cout << "Enter account number: ";
+            cin >> accNumber;
+
+            for(int i = 0; i < accountCount; i++)
+            {
+                if(accounts[i].getAccountNumber() == accNumber)
+                {
+                    accounts[i].displayTransactions();
+                    found = true;
+                    break;
+                }
+            }
+
+            if(!found)
+            {
+                cout << "Account not found." << endl;
+            }
+
+    break;
 
         case 0:
 
