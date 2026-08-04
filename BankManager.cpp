@@ -1,5 +1,6 @@
 #include <iostream>
 #include <vector>
+#include <random>
 #include <string>
 using namespace std;
 
@@ -23,12 +24,12 @@ public:
             cout<<"Enter your User name: "<<endl;
             getline(cin,UserNames);
 
-            do {
-                cout<<"Enter your account number: "<<endl;
-                cin>>accountNumber;
-            }while (accountNumber.length() != 6);
-            cin.ignore();
-
+            // do {
+            //     cout<<"Enter your account number: "<<endl;
+            //     cin>>accountNumber;
+            // }while (accountNumber.length() != 6);
+            // cin.ignore();
+            accountNumber = generateAccountNumber();
             do{
                 cout<<"Enter your Phone number"<<endl;
                 cin>>phoneNumber;
@@ -52,6 +53,16 @@ public:
             cout<<"Your Account Has been created successfully!"<<endl;
             accountDisplay();
 
+    }
+
+    string generateAccountNumber(){
+        accountNumber  = "";
+        accountNumber += (rand()% 9 +1) + '0';
+
+        for(int i = 0;i< 13;i++){
+           accountNumber += (rand()% 10)+ '0';
+        }
+        return accountNumber;
     }
 
    /* void bankServices() {
@@ -174,7 +185,8 @@ public:
         cout<<"Your new Balance is "<<balance<<endl;
     }
 
-    void accountDisplay() const {
+    void accountDisplay() {
+        
         cout<<"GHANKINEMS BANK MANAGEMENT "<<endl;
         cout<<"The account name is : "<<UserNames<<endl;
         cout<<"The account number: "<<accountNumber<<endl;
@@ -297,7 +309,7 @@ int main() {
                 do {
                     cout << "Enter account number: "<<endl;
                     cin>>accNumber;
-                }while (accNumber.length() != 6);
+                }while (accNumber.length() != 13);
             for(int i = 0; i < accountCount; i++)
             {
                 if(accounts[i].getAccountNumber() == accNumber)
@@ -321,7 +333,7 @@ int main() {
            do {
                cout << "Enter account number: "<<endl;
                getline(cin, accNumber);
-           }while (accNumber.length() != 6);
+           }while (accNumber.length() != 13);
             for(int i = 0; i < accountCount; i++)
             {
                 if(accounts[i].getAccountNumber() == accNumber)
@@ -345,7 +357,7 @@ int main() {
             do {
                 cout << "Enter account number: "<<endl;
                 getline(cin, accNumber);
-            }while (accNumber.length() != 6);
+            }while (accNumber.length() != 13);
             for(int i = 0; i < accountCount; i++)
             {
                 if(accounts[i].getAccountNumber() == accNumber)
@@ -369,7 +381,7 @@ int main() {
             do {
                 cout << "Enter account number: "<<endl;
                 getline(cin, accNumber);
-            }while (accNumber.length() != 6);
+            }while (accNumber.length() != 13);
             for(int i = 0; i < accountCount; i++)
             {
                 if(accounts[i].getAccountNumber() == accNumber)
